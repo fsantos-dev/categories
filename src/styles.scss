@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'primeicons/primeicons.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+
+// .custom-btn {
+//   --p-button-primary-background: purple;
+//   --p-button-primary-hover-background: #5a005a;
+//   --p-button-primary-border-color: purple;
+//   --p-button-primary-hover-border-color: #5a005a;
+// }
+
+
+// .custom-btn {
+//   background-color: purple !important;
+//   border-color: purple !important;
+// }

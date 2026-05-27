@@ -1,0 +1,100 @@
+.page-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.search-bar {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+  input {
+    width: 320px;
+  }
+
+}
+
+.skeleton-wrapper {
+  padding: 0.5rem 0;
+}
+
+.description-cell {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 1rem;
+  color: var(--p-text-muted-color);
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.empty-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+.error-icon {
+  font-size: 3rem;
+  color: var(--p-red-500);
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .description-cell {
+    display: none;
+  }
+}
+
+
+.status-pill-button {
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  height: 10px!important;
+}
+
+
+.cursor {
+  cursor: pointer;  
+  width: 100%;
+}
+
+
+// ::ng-deep .custom-btn {
+//   background-color: purple !important;
+//   border-color: purple !important;
+
+//   &:hover {
+//     background-color: darken(purple, 10%) !important;
+//     border-color: darken(purple, 10%) !important;
+//   }
+// }

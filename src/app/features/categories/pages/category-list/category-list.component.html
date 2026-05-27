@@ -1,0 +1,127 @@
+<p-toast />
+<p-confirmDialog [style]="{ width: '420px' }" />
+
+<div class="page-container">
+  <p-toolbar styleClass="mb-4">
+    <ng-template #start>
+      <h1 class="page-title">Gestión de Categorías</h1>
+    </ng-template>
+    <ng-template #end>
+      <p-button
+        label="Nueva Categoría"
+        icon="pi pi-plus"
+        (onClick)="navigateToCreate()"
+        styleClass="custom-btn"
+      />
+    </ng-template>
+  </p-toolbar>
+
+  <div class="search-bar">
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search" />
+      <input
+        pInputText
+        type="text"
+        placeholder="Buscar por nombre o código..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+      
+    </p-iconfield>
+  </div>
+
+  @if (loading()) {
+    <div class="skeleton-wrapper">
+      @for (item of [1, 2, 3, 4, 5]; track item) {
+        <p-skeleton height="52px" style="margin-bottom: 15px;" />
+      }
+    </div>
+  } @else if (hasError()) {
+    <div class="state-message">
+      <i class="pi pi-times-circle error-icon"></i>
+      <p>Ocurrió un error al cargar las categorías.</p>
+      <p-button label="Reintentar" icon="pi pi-refresh" severity="secondary" (onClick)="loadCategories()" />
+    </div>
+  } @else {
+    <p-table
+      [value]="filteredCategories()"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} categorías"
+      styleClass="p-datatable-striped p-datatable-gridlines"
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="code" style="width: 140px">
+            Código <p-sortIcon field="code" />
+          </th>
+          <th pSortableColumn="name">
+            Nombre <p-sortIcon field="name" />
+          </th>
+          <th>Descripción</th>
+          <th style="width: 120px">Estado</th>
+          <th style="width: 130px; text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-category>
+        <tr>
+          <td><strong>{{ category.code }}</strong></td>
+          <td>{{ category.name }}</td>
+          <td class="description-cell">{{ category.description || '—' }}</td>
+          <td>
+            <p-tag
+              [value]="getStatusLabel(category.status)"
+              [severity]="getSeverity(category.status)"
+              (click)="toggleStatus(category)"
+              styleClass="cursor"
+            />
+          </td>
+          <td class="actions-cell">
+            <p-button
+              icon="pi pi-pencil"
+              severity="info"
+              [rounded]="true"
+              [text]="true"
+              pTooltip="Editar"
+              tooltipPosition="top"
+              (onClick)="navigateToEdit(category)"
+            />
+            <!-- <p-button
+              [icon]="category.status === 'active' ? 'pi pi-eye-slash' : 'pi pi-eye'"
+              [severity]="category.status === 'active' ? 'warn' : 'success'"
+              [rounded]="true"
+              [text]="true"
+              [pTooltip]="category.status === 'active' ? 'Desactivar' : 'Activar'"
+              tooltipPosition="top"
+              (onClick)="confirmToggleStatus(category)"
+            /> -->
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [text]="true"
+              pTooltip="Eliminar"
+              tooltipPosition="top"
+              (onClick)="confirmDelete(category)"
+            />
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="5">
+            <div class="state-message">
+              <i class="pi pi-inbox empty-icon"></i>
+              <p>No se encontraron categorías.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</div>

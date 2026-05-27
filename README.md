@@ -1,59 +1,100 @@
-# Categories
+# Categories Manager — Prueba Técnica Frontend Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.12.
+Aplicación Angular para la gestión de categorías internas. Permite listar, crear, editar y cambiar el estado de cada categoría.
 
-## Development server
+---
 
-To start a local development server, run:
+## Requisitos previos
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- [Node.js](https://nodejs.org/) v18 o superior
+- npm v9 o superior (incluido con Node.js)
+- Angular CLI v21
 
 ```bash
-ng generate component component-name
+npm install -g @angular/cli
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## Instalación
 
 ```bash
-ng generate --help
+# 1. Clonar el repositorio
+git clone <url-del-repositorio>
+cd categories
+
+# 2. Instalar dependencias
+npm install
 ```
 
-## Building
+---
 
-To build the project run:
+## Ejecución
 
 ```bash
-ng build
+# Levantar servidor de desarrollo (http://localhost:4200)
+npm start
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
 
 ```bash
-ng test
+# Compilar para producción
+npm run build
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
 
 ```bash
-ng e2e
+# Ejecutar pruebas unitarias
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Arquitectura — Feature-Based Architecture
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+El proyecto sigue una **arquitectura basada en funcionalidades (Feature-Based)**, donde cada módulo de negocio agrupa sus propias páginas, rutas y componentes. El núcleo de la aplicación (modelos, servicios y guards) se centraliza en `core/`, garantizando separación de responsabilidades y facilidad de escalado.
+
+---
+
+## Estructura del proyecto
+
+```
+src/
+└── app/
+    ├── core/                               # Núcleo transversal de la aplicación
+    │   ├── guards/
+    │   │   └── category-exists.guard.ts    # Guard que valida la existencia de una categoría antes de activar la ruta de edición
+    │   ├── models/
+    │   │   └── category.model.ts           # Interfaces y tipos TypeScript del dominio (Category, CategoryStatus, CategoryFormValue)
+    │   └── services/
+    │       └── category.service.ts         # Servicio con BehaviorSubject que simula el backend (CRUD + toggleStatus)
+    │
+    ├── features/                           # Módulos de negocio de la aplicación
+    │   └── categories/                     # Feature de gestión de categorías
+    │       ├── pages/
+    │       │   ├── category-list/          # Página de listado: tabla con búsqueda, editar y cambiar estado
+    │       │   └── category-form/          # Página de formulario: creación y edición con Reactive Forms y validaciones
+    │       └── categories.routes.ts        # Rutas lazy-loaded propias del feature
+    │
+    ├── app.ts                              # Componente raíz
+    ├── app.html                            # Template raíz
+    ├── app.routes.ts                       # Rutas principales (redirige a /categories)
+    ├── app.config.ts                       # Configuración de la aplicación (providers, router)
+    └── app.scss                            # Estilos del componente raíz
+
+src/
+├── styles.scss                             # Estilos globales y tema de PrimeNG
+├── main.ts                                 # Bootstrap de la aplicación
+└── index.html                              # HTML base
+```
+
+---
+
+## Decisiones técnicas destacadas
+
+| Aspecto | Decisión | Justificación |
+|---|---|---|
+| **Estado** | `BehaviorSubject` en el servicio | Simula un store reactivo sin dependencias externas; los componentes reciben siempre el valor más reciente |
+| **Formularios** | Reactive Forms | Control fino de validaciones y estado del formulario desde el componente |
+| **UI** | PrimeNG + PrimeIcons | Componentes accesibles y consistentes sin necesidad de construirlos desde cero |
+| **Guard** | `categoryExistsGuard` (functional) | Evita acceder a `/categories/:id/edit` con un id inexistente; redirige a la lista |
+| **Lazy loading** | `categories.routes.ts` cargado con `loadChildren` | Carga diferida del feature; mejora el tiempo de inicio de la aplicación |
+| **Datos** | Mock en memoria con `delay()` simulado | Permite probar flujos de carga y error sin necesidad de un backend real |
